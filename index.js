@@ -1,16 +1,13 @@
 const express = require('express');
-const { pool } = require('./db'); // Importa a conexão do passo anterior
+const { pool } = require('./db');
 
 const app = express();
 
-// Habilita o Express a entender JSON (corpo da requisição)
 app.use(express.json());
 
 // --- ROTA 1: TESTE DE VIDA (PING) ---
-// Objetivo: Ver se o Node conecta no Banco.
 app.get('/ping', async (req, res) => {
   try {
-    // Tenta buscar a hora atual no servidor do Postgres
     const resultado = await pool.query('SELECT NOW() as hora_servidor');
     res.json({ 
       status: 'online', 
@@ -24,30 +21,25 @@ app.get('/ping', async (req, res) => {
 });
 
 // --- ROTA 2: CRIAR USUÁRIO (POST) ---
-// Objetivo: Receber um Nome e Email e salvar no banco.
 app.post('/usuarios', async (req, res) => {
   try {
     const { nome, email } = req.body;
 
-    // Validação básica (não confie no usuário)
     if (!nome || !email) {
       return res.status(400).json({ erro: 'Nome e Email são obrigatórios' });
     }
 
-    // SQL Seguro: $1 e $2 são placeholders. Isso EVITA HACKERS.
     const queryTexto = 'INSERT INTO usuarios (nome, email) VALUES ($1, $2) RETURNING *';
     const valores = [nome, email];
     
     const resultado = await pool.query(queryTexto, valores);
     
-    // Sucesso: 201 significa "Criado com sucesso"
     res.status(201).json({ 
       mensagem: 'Usuário salvo com sucesso!', 
       usuario: resultado.rows[0] 
     });
 
   } catch (erro) {
-    // Se o email for duplicado, o banco reclama.
     if (erro.code === '23505') {
       return res.status(400).json({ erro: 'Este email já está cadastrado.' });
     }
@@ -56,7 +48,51 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-// Inicia o Servidor
+// --- ROTA 3: ATUALIZAR CLIENTE (PUT) ---
+app.put('/clientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, telefone } = req.body;
+
+    if (!nome || !telefone) {
+      return res.status(400).json({ erro: 'Nome e telefone obrigatórios' });
+    }
+
+    const queryTexto = 'UPDATE clientes SET nome = $1, telefone = $2 WHERE id = $3';
+    const resultado = await pool.query(queryTexto, [nome, telefone, id]);
+
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ erro: 'Cliente não encontrado' });
+    }
+
+    res.json({ mensagem: 'Cliente atualizado com sucesso!' });
+  } catch (erro) {
+    console.log('ERRO DETALHADO:', erro);
+    res.status(500).json({ erro: 'Erro ao atualizar cliente', detalhe: erro.message });
+  }
+});
+
+// --- ROTA 4: DELETAR CLIENTE (DELETE) ---
+app.delete('/clientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('TENTANDO DELETAR ID:', id);
+
+    const resultado = await pool.query('DELETE FROM clientes WHERE id = $1', [id]);
+
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ erro: 'Cliente não encontrado' });
+    }
+
+    res.json({ mensagem: 'Cliente excluído com sucesso!' });
+  } catch (erro) {
+    console.log('ERRO NO DELETE:', erro.message);
+    console.log('ERRO COMPLETO:', erro);
+    res.status(500).json({ erro: 'Erro ao deletar cliente' });
+  }
+});
+
+// --- INICIAR O SERVIDOR ---
 const PORTA = 3000;
 app.listen(PORTA, () => {
   console.log(`✅ Servidor rodando na porta ${PORTA}`);
