@@ -1,42 +1,52 @@
-# API Node.js + PostgreSQL
+API de Clientes - Node.js + PostgreSQL
+API REST com CRUD completo e autenticação JWT.
 
-CRUD básico de usuários para aprendizado de back-end.
-
-## 🚀 Rodar Local
-
-1. Instalar dependências:
-   ```bash
-   npm install
-2. Criar arquivo .env:
+🚀 Executar Local
+bash
+npm install
+Configure o .env:
 
 text
-DATABASE_URL=postgresql://postgres:SUA_SENHA@localhost:5432/meu_mentor_db
-
-3. Criar tabela no PostgreSQL:
+DATABASE_URL=postgresql://postgres:SENHA@localhost:5432/treino_db
+JWT_SECRET=frase_secreta_longa
+Crie as tabelas no PostgreSQL:
 
 sql
-
-CREATE TABLE usuarios (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL
-);
-Rodar:
+CREATE TABLE clientes (id SERIAL PRIMARY KEY, nome VARCHAR(100), telefone VARCHAR(20));
+CREATE TABLE usuarios (id SERIAL PRIMARY KEY, email VARCHAR(100) UNIQUE, senha VARCHAR(255));
+Rode:
 
 bash
 node index.js
+📡 Endpoints
+Públicos
+Método	Rota	Body
+POST	/auth/registro	{email, senha}
 
-📡 Rotas
+POST	/auth/login	{email, senha} → retorna token
 
-Método	Rota	Descrição
-GET	/ping	Testa conexão com banco
-GET	/usuarios	Lista todos
-POST	/usuarios	Cria um novo
+Protegidos (Header: Authorization: Bearer <token>)
 
-🔒 Segurança
+Método	Rota	Body
 
-.env no .gitignore
+GET	/clientes	-
 
-Queries parametrizadas ($1, $2) contra SQL Injection
+POST	/clientes	{nome, telefone}
 
-Connection Pool
+PUT	/clientes/:id	{nome, telefone}
+
+DELETE	/clientes/:id	-
+
+🛠 Stack
+Node.js | Express | PostgreSQL | JWT | bcrypt
+
+📁 Estrutura
+text
+src/
+├── config/       → db.js, env.js
+├── controllers/  → auth, clientes
+├── services/     → queries SQL
+├── routes/       → endpoints
+└── middlewares/  → autenticação JWT
+
+Status: ✅ Funcional | 📦 Pronto para Portfólio | 🔒 Seguro
