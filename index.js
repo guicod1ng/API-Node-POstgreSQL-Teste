@@ -1,8 +1,10 @@
 const express = require('express');
 const clientesRoutes = require('./src/routes/clientesRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 // Middleware para ler JSON no corpo das requisições
 app.use(express.json());
