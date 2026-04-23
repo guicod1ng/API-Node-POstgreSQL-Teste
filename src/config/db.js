@@ -8,6 +8,5 @@ const pool = new Pool({
 });
 
 // Log para debug
-console.log('DATABASE_URL carregada:', process.env.DATABASE_URL ? 'SIM' : 'NÃO');
 
 module.exports = { pool };

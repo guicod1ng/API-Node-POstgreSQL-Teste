@@ -27,7 +27,6 @@ const registrar = async (req, res) => {
 
     res.status(201).json({ mensagem: 'Usuário criado com sucesso', usuario: novoUsuario });
   } catch (erro) {
-    console.log('ERRO NO REGISTRO:', erro);
     res.status(500).json({ erro: 'Erro ao registrar usuário' });
   }
 };
@@ -62,7 +61,6 @@ const login = async (req, res) => {
 
     res.json({ mensagem: 'Login realizado com sucesso', token });
   } catch (erro) {
-    console.log('ERRO NO LOGIN:', erro);
     res.status(500).json({ erro: 'Erro ao fazer login' });
   }
 };
