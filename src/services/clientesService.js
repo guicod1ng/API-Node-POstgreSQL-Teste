@@ -1,42 +1,35 @@
-const {pool} = require('../config/db');
+const { pool } = require('../config/db');
 
-// Listar todos os clientes
-const listar = async () => {
-  const resultado = await pool.query('SELECT * FROM clientes ORDER BY id');
+const listar = async (usuario_id) => {
+  const resultado = await pool.query(
+    'SELECT * FROM clientes WHERE usuario_id = $1 ORDER BY id',
+    [usuario_id]
+  );
   return resultado.rows;
 };
 
-// Criar um cliente
-const criar = async (nome, telefone) => {
+const criar = async (nome, telefone, usuario_id) => {
   const resultado = await pool.query(
-    'INSERT INTO clientes (nome, telefone) VALUES ($1, $2) RETURNING *',
-    [nome, telefone]
+    'INSERT INTO clientes (nome, telefone, usuario_id) VALUES ($1, $2, $3) RETURNING *',
+    [nome, telefone, usuario_id]
   );
   return resultado.rows[0];
 };
 
-// Atualizar um cliente
-const atualizar = async (id, nome, telefone) => {
+const atualizar = async (id, nome, telefone, usuario_id) => {
   const resultado = await pool.query(
-    'UPDATE clientes SET nome = $1, telefone = $2 WHERE id = $3 RETURNING *',
-    [nome, telefone, id]
+    'UPDATE clientes SET nome = $1, telefone = $2 WHERE id = $3 AND usuario_id = $4 RETURNING *',
+    [nome, telefone, id, usuario_id]
   );
   return resultado.rows[0] || null;
 };
 
-// Deletar um cliente
-const deletar = async (id) => {
+const deletar = async (id, usuario_id) => {
   const resultado = await pool.query(
-    'DELETE FROM clientes WHERE id = $1 RETURNING *',
-    [id]
+    'DELETE FROM clientes WHERE id = $1 AND usuario_id = $2 RETURNING *',
+    [id, usuario_id]
   );
   return resultado.rows[0] || null;
 };
 
-// Exportar TUDO
-module.exports = {
-  listar,
-  criar,
-  atualizar,
-  deletar
-};
+module.exports = { listar, criar, atualizar, deletar };
