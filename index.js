@@ -1,5 +1,6 @@
 const express = require('express');
 const clientesRoutes = require('./src/routes/clientesRoutes');
+const agendamentosRoutes = require('./src/routes/agendamentosRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const cors = require('cors');
 
@@ -17,6 +18,8 @@ app.get('/ping', (req, res) => {
 // Rotas da API
 app.use('/auth', authRoutes);
 app.use('/clientes', clientesRoutes);
+app.use('/agendamentos', agendamentosRoutes);
+
 
 // Iniciar servidor
 const { PORTA } = require('./src/config/env');
