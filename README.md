@@ -50,12 +50,14 @@ src/
 npm install
 ```
 
-```env
+**.env**
+```
 DATABASE_URL=postgresql://postgres:SENHA@localhost:5432/treino_db
 JWT_SECRET=sua_frase_secreta
 ```
 
-```sql
+**sql**
+```
 CREATE TABLE usuarios (
   id SERIAL PRIMARY KEY,
   email VARCHAR(100) UNIQUE,
