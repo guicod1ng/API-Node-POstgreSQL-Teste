@@ -8,6 +8,11 @@
 API REST para gerenciamento de clientes com autenticação JWT, arquitetura em camadas e deploy em nuvem.
 
 ---
+## 📸 Teste via Postman 
+
+![preview](./assets/API.png.png)
+
+---
 
 ## ⚙️ Stack
 
@@ -102,6 +107,6 @@ Render (API) • Neon (PostgreSQL)
 
 ---
 
-## 💡 Sobre
+## 💡 Sobre o projeto
 
-Projeto focado em back-end com autenticação, banco relacional e controle de acesso por usuário.
+API desenvolvida para simular um sistema real de gerenciamento de clientes, com autenticação segura e estrutura escalável.
