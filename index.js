@@ -3,12 +3,15 @@ const clientesRoutes = require('./src/routes/clientesRoutes');
 const agendamentosRoutes = require('./src/routes/agendamentosRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const cors = require('cors');
+const Limiter = require('./src/middlewares/rateLimiter');
 
 const app = express();
 app.use(cors());
 
 // Middleware para ler JSON no corpo das requisições
 app.use(express.json());
+
+app.use(Limiter); // Aplicar o rate limiter a todas as rotas
 
 // Rota de teste (ping)
 app.get('/ping', (req, res) => {

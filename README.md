@@ -103,6 +103,12 @@ npm start
 
 ---
 
+## 🛡️ Rate Limiting
+- 100 requisições por IP a cada 15 minutos
+- Excedeu → erro 429
+
+---
+
 ## 🌐 Deploy
 
 Render (API) • Neon (PostgreSQL)
