@@ -110,8 +110,10 @@ npm start
 ---
 
 ## 🌐 Deploy
+```bash
 
-Render (API) • Neon (PostgreSQL)
+Acesse em: https://api-clientes-jqkq.onrender.com
+
 
 ---
 
